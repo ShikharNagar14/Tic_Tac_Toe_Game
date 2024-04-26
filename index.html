@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+    .container {
+        text-align: center;
+    }
+    .board {
+        border: 2px solid #333;
+        border-radius: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        gap: 2px;
+        background-color: #fff;
+    }
+    .cell {
+        border: 1px solid #333;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3em;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .cell:hover {
+        background-color: #fff;
+    }
+    .cell:active {
+        background-color:aqua;
+    }
+    .message {
+        margin-top: 20px;
+        font-size: 1.5em;
+    }
+    .buttons {
+        margin-top: 20px;
+    }
+    .button {
+        font-size: 1em;
+        padding: 10px 20px;
+        margin: 0 10px;
+        cursor: pointer;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    .button:hover {
+        background-color: #15cf46;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Tic Tac Toe</h1>
+    <div class="board" id="board">
+        <div class="cell" onclick="handleClick(0)"></div>
+        <div class="cell" onclick="handleClick(1)"></div>
+        <div class="cell" onclick="handleClick(2)"></div>
+        <div class="cell" onclick="handleClick(3)"></div>
+        <div class="cell" onclick="handleClick(4)"></div>
+        <div class="cell" onclick="handleClick(5)"></div>
+        <div class="cell" onclick="handleClick(6)"></div>
+        <div class="cell" onclick="handleClick(7)"></div>
+        <div class="cell" onclick="handleClick(8)"></div>
+    </div>
+    <div class="message" id="message"></div>
+    <div class="buttons">
+        <button class="button" onclick="resetGame()">Reset Game</button>
+        <button class="button" onclick="startNewTurn()">New Turn</button>
+    </div>
+</div>
+<script>
+    const board = document.getElementById('board');
+    const cells = document.querySelectorAll('.cell');
+    const message = document.getElementById('message');
+    let currentPlayer = 'X';
+    let gameState = ['', '', '', '', '', '', '', '', ''];
+
+    function handleClick(index) {
+        if (gameState[index] === '' && !checkWinner()) {
+            gameState[index] = currentPlayer;
+            cells[index].innerText = currentPlayer;
+            if (checkWinner()) {
+                message.innerText = `${currentPlayer} Wins!`;
+                highlightWinner();
+            } else if (!gameState.includes('')) {
+                message.innerText = "It's a draw!";
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                message.innerText = `${currentPlayer}'s turn`;
+            }
+        }
+    }
+
+    function resetGame() {
+        currentPlayer = 'X';
+        gameState = ['', '', '', '', '', '', '', '', ''];
+        cells.forEach(cell => {
+            cell.innerText = '';
+            cell.style.backgroundColor = '#fff';
+        });
+        message.innerText = '';
+    }
+
+    function startNewTurn() {
+        if (checkWinner() || !gameState.includes('')) {
+            resetGame();
+        }
+    }
+
+    function checkWinner() {
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        for (let condition of winConditions) {
+            const [a, b, c] = condition;
+            if (gameState[a] !== '' && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function highlightWinner() {
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        for (let condition of winConditions) {
+            const [a, b, c] = condition;
+            if (gameState[a] !== '' && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                cells[a].style.backgroundColor = '#2ecc71';
+                cells[b].style.backgroundColor = '#2ecc71';
+                cells[c].style.backgroundColor = '#2ecc71';
+                break;
+            }
+        }
+    }
+</script>
+</body>
+</html>
